@@ -14,7 +14,12 @@ class CreateMoviesTable extends Migration
     public function up()
     {
         Schema::create('movies', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->string('title', 100);
+            $table->text('description');
+            $table->string('embed_url')->unique();
+            $table->integer('viewed')->default(0);
+            $table->json('genres')->nullable();
             $table->timestamps();
         });
     }

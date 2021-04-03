@@ -11,8 +11,15 @@ class MovieFactory extends Factory
 
     public function definition(): array
     {
+        $genres = ['action','adventure','comedy','horror'];
+
     	return [
-    	    //
+    	    'id' => $this->faker->uuid,
+            'title' => $this->faker->text(50),
+            'description' => $this->faker->text(150),
+            'embed_url' => $this->faker->url,
+            'genres' => json_encode( array_slice($genres, rand(0, sizeof($genres) - 1)) ),
+            'viewed' => rand(),
     	];
     }
 }
