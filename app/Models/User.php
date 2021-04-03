@@ -8,8 +8,11 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\Provider\Node\RandomNodeProvider;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract
+class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
     use Authenticatable, Authorizable, HasFactory;
 
@@ -19,7 +22,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'name', 'email',
+        'firstname', 
+        'lastname', 
+        'email', 
+        'email_verified_at',
+        'password',
     ];
 
     /**
@@ -30,4 +37,45 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+
+    /** 
+     * Indicates if the IDs are UUID's. 
+     * 
+     * @var bool 
+     */ 
+    public $incrementing = false; 
+
+    public static function boot()
+    { 
+         parent::boot();
+
+         static::creating(function ($model) {
+
+            $nodeProvider = new RandomNodeProvider();
+
+            $uuid = Uuid::uuid1($nodeProvider->getNode());
+            
+            $model->id = $uuid; 
+         }); 
+    } 
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 }
