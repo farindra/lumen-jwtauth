@@ -1,4 +1,5 @@
 <?php
+use App\Libraries\Core;
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
@@ -13,6 +14,14 @@
 |
 */
 
-$router->get('/', function () use ($router) {
+/* lumen version */
+$router->get('/version', function () use ($router) {
     return $router->app->version();
+});
+
+/* v1 group */
+$router->group(['prefix' => 'v1'], function () use ($router) {
+
+    Core::renderRoutes('v1', $router);
+    
 });
