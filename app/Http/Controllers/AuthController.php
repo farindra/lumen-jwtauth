@@ -102,7 +102,15 @@ class AuthController extends Controller
         return $this->respondWithToken(auth()->refresh(), 'refresh token');
     }
 
-    
+    /**
+     * user profile
+     *
+     * @return JsonResponse
+     */
+    public function profile() {
+
+        return $this->core->setResponse('success', 'User Profile',  auth()->user());
+    }
 
 
     /**
@@ -132,14 +140,6 @@ class AuthController extends Controller
                 $validator = [
                     'email' => 'required|string',
                     'password' => 'required|string',
-                ];
-
-                break;
-
-            case 'email':
-
-                $validator = [
-                    'token' => 'required|string',
                 ];
 
                 break;
