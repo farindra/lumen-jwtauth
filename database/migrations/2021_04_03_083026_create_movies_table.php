@@ -21,6 +21,7 @@ class CreateMoviesTable extends Migration
             $table->integer('viewed')->default(0);
             $table->json('genres')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

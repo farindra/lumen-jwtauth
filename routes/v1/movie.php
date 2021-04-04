@@ -11,6 +11,9 @@ $router->group(['prefix' => 'movie', 'as' => 'movie'], function () use ($router)
 
     /* create movies */
     $router->post('/create', [ 'as' => 'create', 'uses' => 'MovieController@create']);
+
+    /* movies viewed */
+    $router->put('/{id}/viewed', [ 'as' => 'viewed', 'uses' => 'MovieController@viewed']);
     
     /* update movies */
     $router->patch('/{id}/update', [ 'as' => 'update', 'uses' => 'MovieController@update']);

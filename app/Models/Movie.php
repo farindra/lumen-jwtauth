@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Nonstandard\Uuid;
 use Ramsey\Uuid\Provider\Node\RandomNodeProvider;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Movie extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
