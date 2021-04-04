@@ -15,12 +15,12 @@ use App\Libraries\Core;
 */
 
 /* lumen version */
-$router->get('/version', function () use ($router) {
+$router->get('/version', [ 'as' => 'version', function () use ($router) {
     return $router->app->version();
-});
+}]);
 
 /* v1 group */
-$router->group(['prefix' => 'v1'], function () use ($router) {
+$router->group(['prefix' => 'v1', 'as' => 'v1'], function () use ($router) {
 
     Core::renderRoutes('v1', $router);
     
