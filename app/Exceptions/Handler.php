@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -49,6 +50,26 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        /* only run if debug is turn off */
+        if ( !env('APP_DEBUG', true) ) {
+
+            /* handling 404 exception */
+            if($exception instanceof NotFoundHttpException){
+
+                return response()->json([
+                        'error' => 'Not Found',
+                    ])->setStatusCode(404);
+            }
+
+            /* handling 500 exception */
+            return response()->json([
+                'error' => 'server problem',
+                'error_info' => $exception->getMessage(),
+                'data' => $exception->getTraceAsString(),
+            ])->setStatusCode(500);
+
+        }
+
         return parent::render($request, $exception);
     }
 }
