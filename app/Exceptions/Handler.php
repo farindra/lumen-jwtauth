@@ -65,7 +65,6 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'error' => 'server problem',
                 'error_info' => $exception->getMessage(),
-                'data' => $exception->getTraceAsString(),
             ])->setStatusCode(500);
 
         }
