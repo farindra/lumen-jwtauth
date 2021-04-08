@@ -1,7 +1,6 @@
 <?php
 
 use Laravel\Lumen\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
 
 class UserAuthTest extends TestCase
 {
@@ -76,7 +75,7 @@ class UserAuthTest extends TestCase
         }
 
         $request->response->assertJson([
-            'success' => 'Login Success'
+            'success' => 'Successfully login'
         ])->assertStatus(200);
 
     }
