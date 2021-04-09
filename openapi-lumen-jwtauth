@@ -1,0 +1,34 @@
+openapi: '3.0.3'
+info:
+  title: Lumen JWT Auth
+  version: '1.0'
+servers:
+  - url: http://{baseUrl}/{basePath}
+    description: 'Development Server'
+    variables:
+      basePath: 
+        default: v1
+  - url: https://yourstagingdomain.com/v1
+    description: 'Staging Server'
+    variables:
+      basePath: 
+        default: v1
+  - url: https://yourproductiondomain.com/v1
+    description: 'Production Server'
+    variables:
+      basePath: 
+        default: v1
+paths:
+  /version:
+    get:
+      description: Get app version
+      responses:
+        '200':
+          description: OK
+  /ping:
+    get:
+      responses:
+        '200':
+          description: OK
+
+  
