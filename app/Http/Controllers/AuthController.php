@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -89,7 +88,7 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return $this->core->setResponse('success', 'Successfully logged out', $token );
+        return $this->core->setResponse('success', 'Successfully logged out' );
     }
 
     /**

@@ -1,0 +1,402 @@
+openapi: 3.0.3
+info:
+  title: Lumen JWT Auth
+  version: '1.0'
+  contact:
+    email: farindra.project@gmail.com
+    name: Farindra
+    url: 'https://farindra.com'
+  license:
+    name: MIT license
+    url: 'https://opensource.org/licenses/MIT'
+servers:
+  - url: '{protocol}://localhost:8000/{basePath}'
+    description: Development Server
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      basePath:
+        enum:
+          - v1
+          - v2
+        default: v1
+  - url: '{protocol}://yourstagingdomain.com/{basePath}'
+    description: Staging Server
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      basePath:
+        enum:
+          - v1
+          - v2
+        default: v1
+  - url: '{protocol}://yourproductiondomain.com/{basePath}'
+    description: Production Server
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      basePath:
+        enum:
+          - v1
+          - v2
+        default: v1
+paths:
+  /register:
+    post:
+      tags:
+        - user
+      description: Register new user
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Register'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorize'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /login:
+    post:
+      tags:
+        - user
+      description: Login user to get JWT bearer token
+      requestBody:
+        description: >-
+          <p> to get token please use this credential  (development mode only)
+          <br/><br/>user = <strong>john.doe@example.com</strong> <br/> password
+          = <strong>secret</strong></p>
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorize'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /profile:
+    get:
+      tags:
+        - user
+      description: Get user profile info
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorize'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /refresh-token:
+    get:
+      tags:
+        - user
+      description: Refresh user token
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorize'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /logout:
+    get:
+      tags:
+        - user
+      description: Get user logout
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorize'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /version:
+    get:
+      tags:
+        - common
+      description: Get app version
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorize'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /ping:
+    get:
+      tags:
+        - common
+      description: Get ping response should return 'pong'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorize'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /movie/all:
+    get:
+      tags:
+        - movie
+      description: Get All Movie list paginate
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 15
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorize'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  '/movie/{id}':
+    get:
+      tags:
+        - movie
+      description: Get movie by movie id
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: Movie id
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorize'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /movie/create:
+    post:
+      tags:
+        - movie
+      security:
+        - BearerAuth: []
+      description: Create new movie
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Movie'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Movie'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorize'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  '/movie/{id}/update':
+    patch:
+      tags:
+        - movie
+      security:
+        - BearerAuth: []
+      description: Create new movie
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: Movie id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Movie'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Movie'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorize'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  '/movie/{id}/viewed':
+    put:
+      tags:
+        - movie
+      security:
+        - BearerAuth: []
+      description: Increment movie viewed
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: Movie id
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorize'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Please login with auth API login to get token.
+  responses:
+    Success:
+      description: Success
+    BadRequest:
+      description: Bad Request
+    NotFound:
+      description: Not Found
+    Unauthorize:
+      description: Unauthorize
+    ServerError:
+      description: Server Error
+  schemas:
+    Register:
+      title: Register
+      type: object
+      properties:
+        firstname:
+          type: string
+          description: User First Name
+        lastname:
+          type: string
+          description: User Last Name
+        email:
+          type: string
+          description: User email
+        password:
+          type: string
+          description: User password
+      required:
+        - firstname
+        - lastname
+        - email
+        - password
+    Login:
+      title: Login
+      type: object
+      properties:
+        email:
+          type: string
+          description: User email
+        password:
+          type: string
+          description: User Password
+      required:
+        - email
+        - password
+    Movie:
+      title: Movie
+      type: object
+      properties:
+        title:
+          type: string
+          description: Movie title
+        description:
+          type: string
+          description: Movie description
+        genres:
+          type: object
+          description: 'Movie genres ["action","adventure","comedy","horror"]'
+        embed_url:
+          type: string
+          description: Movie embed / url
+      required:
+        - title
+        - description
+        - embed_url
+        - genres
