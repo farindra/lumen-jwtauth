@@ -9,6 +9,7 @@ use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use app\Libraries\Core;
 
 class Handler extends ExceptionHandler
 {
@@ -53,6 +54,8 @@ class Handler extends ExceptionHandler
         /* only run if debug is turn off */
         if ( !env('APP_DEBUG', true) ) {
 
+            $core = new Core;
+
             /* handling 404 exception */
             if($exception instanceof NotFoundHttpException){
 
@@ -62,9 +65,12 @@ class Handler extends ExceptionHandler
             }
 
             /* handling 500 exception */
+            $exception_name = get_class($exception);
+
+            $error = $core->log('error', "Exception ($exception_name) : " . $exception->getTraceAsString() , true);
+
             return response()->json([
-                'error' => 'server problem',
-                'error_info' => $exception->getMessage(),
+                'error' => "Server problem, code [$error]",
             ])->setStatusCode(500);
 
         }

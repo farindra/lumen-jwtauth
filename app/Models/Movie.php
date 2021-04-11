@@ -39,7 +39,14 @@ class Movie extends Model
 
             $nodeProvider = new RandomNodeProvider();
 
-            $uuid = Uuid::uuid1($nodeProvider->getNode());
+            /* validate duplicate UUID */
+            do{
+
+                $uuid = Uuid::uuid1($nodeProvider->getNode());
+
+                $uuid_exist = self::where('id', $uuid)->exists();
+
+            } while ($uuid_exist);
             
             $model->id = $uuid; 
          }); 

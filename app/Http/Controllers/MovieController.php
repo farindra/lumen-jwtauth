@@ -8,14 +8,25 @@ use Illuminate\Support\Facades\Validator;
 
 class MovieController extends Controller
 {    
-    /**
-     * show all movie
-     *
-     * @return JsonResponse
-     */
-    public function all(){
 
-        return $this->core->setResponse('success', 'Get Movies', Movie::all());
+    /**
+     * get all movie paginate
+     *
+     * @param  Request $request per_page=15&page=1
+     * @return void
+     */
+    public function all(Request $request){
+
+        /* define record per page  */
+        $per_page = (int) ($request->per_page ?? 15);
+
+        /* limit per page not greater then 50 */
+        if ($per_page > 50 ) {
+
+            $per_page = 50;
+        }
+
+        return $this->core->setResponse('success', 'Get Movies', Movie::paginate($per_page));
     }
     
     /**
@@ -110,7 +121,7 @@ class MovieController extends Controller
      */
     public function delete($id) {
         
-        if (! $movie = Movie::find($id)) {
+        if (!$movie = Movie::find($id)) {
 
             return $this->core->setResponse('error', 'Movie Not Found', NULL, FALSE, 404);
         }

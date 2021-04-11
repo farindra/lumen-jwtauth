@@ -14,10 +14,10 @@ class MovieFactory extends Factory
         $genres = ['action','adventure','comedy','horror'];
 
     	return [
-    	    'id' => $this->faker->uuid,
+    	    'id' => $uuid = $this->faker->uuid,
             'title' => $this->faker->text(50),
             'description' => $this->faker->text(150),
-            'embed_url' => $this->faker->url,
+            'embed_url' => $this->faker->url . '/' .  $uuid,
             'genres' => json_encode( array_slice($genres, rand(0, sizeof($genres) - 1)) ),
             'viewed' => rand(),
     	];

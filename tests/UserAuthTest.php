@@ -40,6 +40,21 @@ class UserAuthTest extends TestCase
         ])->assertStatus(400);
 
     }
+
+    /**
+     * test unauthorized route auth middleware
+     *
+     * @return void
+     */
+    public function test_unauthorized_access_auth_middleware()
+    {
+        $request = $this->get('/v1/profile');
+
+        $request->response->assertJson([
+            'error' => 'Unauthorized'
+        ])->assertStatus(401);
+    }
+
     
     /**
      * test validate valid login
@@ -79,21 +94,7 @@ class UserAuthTest extends TestCase
         ])->assertStatus(200);
 
     }
-
-    /**
-     * test unauthorized route auth middleware
-     *
-     * @return void
-     */
-    public function test_unauthorized_access_auth_middleware()
-    {
-        $request = $this->get('/v1/profile');
-
-        $request->response->assertJson([
-            'error' => 'Unauthorized'
-        ])->assertStatus(401);
-    }
-
+    
     /**
      * test authorized route auth middleware
      *
@@ -101,21 +102,19 @@ class UserAuthTest extends TestCase
      */
     public function test_authorized_access_auth_middleware()
     {
-        $this->getToken();
+        $this->setToken();
 
-        $request = $this->get('/v1/profile',[
-            'Authorization' => "Bearer $this->token", 
-        ]);
+        $request = $this->get('/v1/profile');
 
         $request->response->assertStatus(200);
     }
     
     /**
-     * getToken
+     * set token for auth
      *
      * @return void
      */
-    private function getToken() {
+    private function setToken() {
 
         /* valid register */
         $request = $this->post('/v1/register', [
@@ -126,19 +125,11 @@ class UserAuthTest extends TestCase
         ]);
 
         /* valid login */
-        $request = $this->post('/v1/login', [
+        $this->post('/v1/login', [
             'email' => 'john.doe@email.com',
             'password' => 'secret',
         ]);
 
-        $data = $request->response->decodeResponseJson()?? [];
-
-        if ($data['success'] ?? false) {
-
-            $this->token = $data['data']['token'] ?? '';
-        }
-
     }
-
 
 }
