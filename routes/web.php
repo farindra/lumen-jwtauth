@@ -14,11 +14,6 @@ use App\Libraries\Core;
 |
 */
 
-/* lumen version */
-$router->get('/version', [ 'as' => 'version', function () use ($router) {
-    return $router->app->version();
-}]);
-
 /* v1 group */
 $router->group(['prefix' => 'v1', 'as' => 'v1'], function () use ($router) {
 
