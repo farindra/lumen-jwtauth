@@ -62,7 +62,7 @@ $ phpunit
 ```
 
 ## Swagger File
-Swagger file is in root folder ( [swagger.yaml](swagger.yml) ), copy and paste it into [Swager Editor Online](https://editor.swagger.io) to test all Aplication API.
+Swagger file is in root folder ( [swagger.yaml](swagger.yaml) ), copy and paste it into [Swager Editor Online](https://editor.swagger.io) to test all Aplication API.
 
 
 ## CHANGE LOG
